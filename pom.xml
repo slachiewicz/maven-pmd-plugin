@@ -26,7 +26,7 @@ under the License.
     <artifactId>maven-plugins</artifactId>
     <groupId>org.apache.maven.plugins</groupId>
     <version>33</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <artifactId>maven-pmd-plugin</artifactId>
@@ -85,7 +85,7 @@ under the License.
   </distributionManagement>
 
   <properties>
-    <mavenVersion>3.0</mavenVersion>
+    <mavenVersion>3.6.3</mavenVersion>
     <doxiaVersion>1.7</doxiaVersion>
     <javaVersion>7</javaVersion><!-- Because PMD 5.4+ requires Java 7 -->
     <pmdVersion>6.21.0</pmdVersion>
