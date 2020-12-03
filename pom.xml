@@ -26,7 +26,7 @@ under the License.
     <artifactId>maven-plugins</artifactId>
     <groupId>org.apache.maven.plugins</groupId>
     <version>33</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <artifactId>maven-pmd-plugin</artifactId>
@@ -218,7 +218,7 @@ under the License.
     <dependency><!-- wiremock requires 4.5.3 but Doxia brings 4.0.2 and httpcore 4.0.1  -->
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
-      <version>4.5.3</version>
+      <version>4.5.13</version>
       <!-- scope>test</scope> Required by Doxia transitively. -->
     </dependency>
     <dependency>
