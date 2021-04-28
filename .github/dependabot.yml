@@ -1,0 +1,42 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.apache.maven:maven-embedder
+    versions:
+    - 3.6.3
+  - dependency-name: org.apache.httpcomponents:httpclient
+    versions:
+    - 4.5.13
+  - dependency-name: org.codehaus.mojo:animal-sniffer-maven-plugin
+    versions:
+    - "1.19"
+  - dependency-name: org.apache.maven.doxia:doxia-site-renderer
+    versions:
+    - "1.9"
+  - dependency-name: org.apache.maven.doxia:doxia-decoration-model
+    versions:
+    - "1.9"
+  - dependency-name: org.apache.maven.doxia:doxia-sink-api
+    versions:
+    - "1.9"
+  - dependency-name: org.apache.maven:maven-compat
+    versions:
+    - 3.6.3
+  - dependency-name: org.apache.maven:maven-plugin-api
+    versions:
+    - 3.6.3
+  - dependency-name: org.apache.maven:maven-model
+    versions:
+    - 3.6.3
+  - dependency-name: org.apache.maven:maven-artifact
+    versions:
+    - 3.6.3
+  - dependency-name: org.slf4j:jul-to-slf4j
+    versions:
+    - 1.7.30
