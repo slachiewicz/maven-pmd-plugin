@@ -34,7 +34,7 @@ import net.sourceforge.pmd.cpd.CpdAnalysis;
 import net.sourceforge.pmd.cpd.SimpleRenderer;
 import net.sourceforge.pmd.cpd.XMLRenderer;
 import net.sourceforge.pmd.lang.Language;
-import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.api.plugin.MojoException;
 import org.apache.maven.plugins.pmd.ExcludeDuplicationsFromFile;
 import org.apache.maven.reporting.MavenReportException;
 import org.slf4j.Logger;
@@ -121,7 +121,7 @@ public class CpdExecutor extends Executor {
     public CpdResult run() throws MavenReportException {
         try {
             excludeDuplicationsFromFile.loadExcludeFromFailuresData(request.getExcludeFromFailureFile());
-        } catch (MojoExecutionException e) {
+        } catch (MojoException e) {
             throw new MavenReportException("Error loading exclusions", e);
         }
 

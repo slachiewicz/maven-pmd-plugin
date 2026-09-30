@@ -25,12 +25,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Execute;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.api.plugin.MojoException;
+import org.apache.maven.api.plugin.annotations.Mojo;
+import org.apache.maven.api.plugin.annotations.Parameter;
 import org.apache.maven.plugins.pmd.model.PmdErrorDetail;
 import org.apache.maven.plugins.pmd.model.PmdFile;
 import org.apache.maven.plugins.pmd.model.Violation;
@@ -40,10 +37,12 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 /**
  * Fails the build if there were any PMD violations in the source code.
  *
+ * <p>This goal only reads the {@code pmd.xml} result file in {@code targetDirectory}. It no longer forks
+ * the {@code pmd} report goal, so that file must have been produced earlier in the build.
+ *
  * @since 2.0
  */
-@Mojo(name = "check", defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
-@Execute(goal = "pmd")
+@Mojo(name = "check", defaultPhase = "verify")
 public class PmdViolationCheckMojo extends AbstractPmdViolationCheckMojo<Violation> {
     /**
      * Default constructor. Initializes with the correct {@link ExcludeViolationsFromFile}.
@@ -76,7 +75,7 @@ public class PmdViolationCheckMojo extends AbstractPmdViolationCheckMojo<Violati
     /**
      * {@inheritDoc}
      */
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoException {
         if (skip) {
             getLog().info("Skipping PMD execution");
             return;

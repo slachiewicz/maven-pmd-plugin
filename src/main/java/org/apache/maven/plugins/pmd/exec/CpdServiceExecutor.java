@@ -25,7 +25,6 @@ import javax.inject.Singleton;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.reporting.MavenReportException;
-import org.apache.maven.toolchain.ToolchainManager;
 
 /**
  * Service for executing CPD.
@@ -35,8 +34,8 @@ import org.apache.maven.toolchain.ToolchainManager;
 public class CpdServiceExecutor extends ServiceExecutor {
 
     @Inject
-    public CpdServiceExecutor(ToolchainManager toolchainManager, Provider<MavenSession> sessionProvider) {
-        super(toolchainManager, sessionProvider);
+    public CpdServiceExecutor(Provider<MavenSession> sessionProvider) {
+        super(sessionProvider);
     }
 
     public CpdResult execute(CpdRequest request) throws MavenReportException {

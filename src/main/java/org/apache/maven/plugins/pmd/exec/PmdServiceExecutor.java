@@ -25,7 +25,6 @@ import javax.inject.Singleton;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.reporting.MavenReportException;
-import org.apache.maven.toolchain.ToolchainManager;
 
 /**
  * Service for executing PMD.
@@ -35,8 +34,8 @@ import org.apache.maven.toolchain.ToolchainManager;
 public class PmdServiceExecutor extends ServiceExecutor {
 
     @Inject
-    public PmdServiceExecutor(ToolchainManager toolchainManager, Provider<MavenSession> sessionProvider) {
-        super(toolchainManager, sessionProvider);
+    public PmdServiceExecutor(Provider<MavenSession> sessionProvider) {
+        super(sessionProvider);
     }
 
     public PmdResult execute(PmdRequest request) throws MavenReportException {

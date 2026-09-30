@@ -25,7 +25,6 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.plugins.pmd.exec.PmdServiceExecutor;
-import org.apache.maven.toolchain.ToolchainManager;
 import org.codehaus.plexus.i18n.I18N;
 import org.codehaus.plexus.resource.ResourceManager;
 
@@ -47,8 +46,7 @@ public class AggregatorPmdNoForkReport extends AggregatorPmdReport {
             ResourceManager locator,
             ConfigurationService configurationService,
             I18N i18n,
-            PmdServiceExecutor serviceExecutor,
-            ToolchainManager toolchainManager) {
-        super(locator, configurationService, i18n, serviceExecutor, toolchainManager);
+            PmdServiceExecutor serviceExecutor) {
+        super(locator, configurationService, i18n, serviceExecutor);
     }
 }

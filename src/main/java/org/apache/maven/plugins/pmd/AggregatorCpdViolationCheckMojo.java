@@ -18,17 +18,14 @@
  */
 package org.apache.maven.plugins.pmd;
 
-import org.apache.maven.plugins.annotations.Execute;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.api.plugin.annotations.Mojo;
 
 /**
  * Fail the build in an <b>aggregator</b> project if there were any CPD violations in the source code.
  *
  * @since 3.15.0
  */
-@Mojo(name = "aggregate-cpd-check", defaultPhase = LifecyclePhase.VERIFY, threadSafe = true, aggregator = true)
-@Execute(goal = "aggregate-cpd")
+@Mojo(name = "aggregate-cpd-check", defaultPhase = "verify", aggregator = true)
 public class AggregatorCpdViolationCheckMojo extends CpdViolationCheckMojo {
     @Override
     protected boolean isAggregator() {

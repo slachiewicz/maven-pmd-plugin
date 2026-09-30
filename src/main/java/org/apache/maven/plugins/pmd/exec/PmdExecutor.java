@@ -51,7 +51,7 @@ import net.sourceforge.pmd.renderers.Renderer;
 import net.sourceforge.pmd.renderers.TextRenderer;
 import net.sourceforge.pmd.renderers.XMLRenderer;
 import net.sourceforge.pmd.reporting.Report;
-import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.api.plugin.MojoException;
 import org.apache.maven.plugins.pmd.ExcludeViolationsFromFile;
 import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.plexus.util.FileUtils;
@@ -393,7 +393,7 @@ public class PmdExecutor extends Executor {
 
         try {
             excludeFromFile.loadExcludeFromFailuresData(request.getExcludeFromFailureFile());
-        } catch (MojoExecutionException e) {
+        } catch (MojoException e) {
             throw new MavenReportException("Unable to load exclusions", e);
         }
 

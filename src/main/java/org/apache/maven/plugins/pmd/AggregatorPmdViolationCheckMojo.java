@@ -18,17 +18,14 @@
  */
 package org.apache.maven.plugins.pmd;
 
-import org.apache.maven.plugins.annotations.Execute;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.api.plugin.annotations.Mojo;
 
 /**
  * Fails the build in an <b>aggregator</b> project if there were any PMD violations in the source code.
  *
  * @since 3.15.0
  */
-@Mojo(name = "aggregate-pmd-check", defaultPhase = LifecyclePhase.VERIFY, aggregator = true, threadSafe = true)
-@Execute(goal = "aggregate-pmd")
+@Mojo(name = "aggregate-pmd-check", defaultPhase = "verify", aggregator = true)
 public class AggregatorPmdViolationCheckMojo extends PmdViolationCheckMojo {
     @Override
     protected boolean isAggregator() {
