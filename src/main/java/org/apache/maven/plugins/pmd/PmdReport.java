@@ -37,6 +37,8 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import net.sourceforge.pmd.renderers.Renderer;
+import org.apache.maven.api.Toolchain;
+import org.apache.maven.api.services.ToolchainManager;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
@@ -46,8 +48,6 @@ import org.apache.maven.plugins.pmd.exec.PmdResult;
 import org.apache.maven.plugins.pmd.exec.PmdServiceExecutor;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.MavenReportException;
-import org.apache.maven.toolchain.Toolchain;
-import org.apache.maven.toolchain.ToolchainManager;
 import org.codehaus.plexus.i18n.I18N;
 import org.codehaus.plexus.resource.ResourceManager;
 import org.codehaus.plexus.resource.loader.FileResourceCreationException;
@@ -263,8 +263,6 @@ public class PmdReport extends AbstractPmdReport {
 
     private final ConfigurationService configurationService;
 
-    private final ToolchainManager toolchainManager;
-
     /**
      * Contains the result of the last PMD execution.
      * It might be <code>null</code> which means, that PMD
@@ -277,13 +275,11 @@ public class PmdReport extends AbstractPmdReport {
             ResourceManager locator,
             ConfigurationService configurationService,
             I18N i18n,
-            PmdServiceExecutor serviceExecutor,
-            ToolchainManager toolchainManager) {
+            PmdServiceExecutor serviceExecutor) {
         this.locator = locator;
         this.configurationService = configurationService;
         this.i18n = i18n;
         this.serviceExecutor = serviceExecutor;
-        this.toolchainManager = toolchainManager;
     }
 
     /**
@@ -636,8 +632,9 @@ public class PmdReport extends AbstractPmdReport {
 
         Toolchain toolchain = serviceExecutor.getToolchain(getJdkToolchain());
         if (toolchain == null) {
-            List<Toolchain> toolchains =
-                    toolchainManager.getToolchains(session, "jdk", Collections.singletonMap("version", targetJdk));
+            List<Toolchain> toolchains = session.getSession()
+                    .getService(ToolchainManager.class)
+                    .getToolchains(session.getSession(), "jdk", Collections.singletonMap("version", targetJdk));
             if (toolchains != null && !toolchains.isEmpty()) {
                 if (toolchains.size() > 1) {
                     getLog().warn("More than one toolchain found for jdk " + targetJdk + ": " + toolchains

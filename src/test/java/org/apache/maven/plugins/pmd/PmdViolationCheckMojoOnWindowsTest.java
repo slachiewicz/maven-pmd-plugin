@@ -18,12 +18,12 @@
  */
 package org.apache.maven.plugins.pmd;
 
+import net.sourceforge.pmd.PMDVersion;
+import org.apache.maven.api.plugin.MojoException;
 import org.apache.maven.api.plugin.testing.Basedir;
 import org.apache.maven.api.plugin.testing.InjectMojo;
 import org.apache.maven.api.plugin.testing.MojoParameter;
 import org.apache.maven.api.plugin.testing.MojoTest;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 
@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.condition.OS.WINDOWS;
 @EnabledOnOs(WINDOWS)
 public class PmdViolationCheckMojoOnWindowsTest {
 
-    @Basedir("/unit/default-configuration")
+    @Basedir("${basedir}/target/test-classes/unit/default-configuration")
     @InjectMojo(goal = "check", pom = "pmd-check-default-configuration-plugin-config.xml")
     @MojoParameter(name = "siteDirectory", value = "src/site")
     @MojoParameter(name = "targetDirectory", value = "pmd-report-windows")
@@ -48,14 +48,13 @@ public class PmdViolationCheckMojoOnWindowsTest {
         try {
             mojo.execute();
 
-            fail("MojoFailureException should be thrown.");
-        } catch (final MojoFailureException e) {
-            assertTrue(
-                    e.getMessage().startsWith("PMD " + AbstractPmdReport.getPmdVersion() + " has found 8 violations."));
+            fail("MojoException should be thrown.");
+        } catch (final MojoException e) {
+            assertTrue(e.getMessage().startsWith("PMD " + PMDVersion.VERSION + " has found 8 violations."));
         }
     }
 
-    @Basedir("/unit/default-configuration")
+    @Basedir("${basedir}/target/test-classes/unit/default-configuration")
     @InjectMojo(goal = "check", pom = "pmd-check-notfailonviolation-plugin-config.xml")
     @MojoParameter(name = "siteDirectory", value = "src/site")
     @MojoParameter(name = "targetDirectory", value = "pmd-report-windows")
@@ -65,7 +64,7 @@ public class PmdViolationCheckMojoOnWindowsTest {
         mojo.execute();
     }
 
-    @Basedir("/unit/default-configuration")
+    @Basedir("${basedir}/target/test-classes/unit/default-configuration")
     @InjectMojo(goal = "check", pom = "pmd-check-notfailmaxviolation-plugin-config.xml")
     @MojoParameter(name = "siteDirectory", value = "src/site")
     @MojoParameter(name = "targetDirectory", value = "pmd-report-windows")
@@ -74,7 +73,7 @@ public class PmdViolationCheckMojoOnWindowsTest {
         mojo.execute();
     }
 
-    @Basedir("/unit/default-configuration")
+    @Basedir("${basedir}/target/test-classes/unit/default-configuration")
     @InjectMojo(goal = "check", pom = "pmd-check-failmaxviolation-plugin-config.xml")
     @MojoParameter(name = "siteDirectory", value = "src/site")
     @MojoParameter(name = "targetDirectory", value = "pmd-report-windows")
@@ -83,14 +82,13 @@ public class PmdViolationCheckMojoOnWindowsTest {
         try {
             mojo.execute();
             fail("Exception Expected");
-        } catch (final MojoFailureException e) {
+        } catch (final MojoException e) {
             assertTrue(e.getMessage()
-                    .startsWith("PMD " + AbstractPmdReport.getPmdVersion()
-                            + " has found 5 violations and issued 3 warnings."));
+                    .startsWith("PMD " + PMDVersion.VERSION + " has found 5 violations and issued 3 warnings."));
         }
     }
 
-    @Basedir("/unit/default-configuration")
+    @Basedir("${basedir}/target/test-classes/unit/default-configuration")
     @InjectMojo(goal = "check", pom = "pmd-check-failonpriority-plugin-config.xml")
     @MojoParameter(name = "siteDirectory", value = "src/site")
     @MojoParameter(name = "targetDirectory", value = "pmd-report-windows")
@@ -99,7 +97,7 @@ public class PmdViolationCheckMojoOnWindowsTest {
         mojo.execute();
     }
 
-    @Basedir("/unit/default-configuration")
+    @Basedir("${basedir}/target/test-classes/unit/default-configuration")
     @InjectMojo(goal = "check", pom = "pmd-check-failandwarnonpriority-plugin-config.xml")
     @MojoParameter(name = "siteDirectory", value = "src/site")
     @MojoParameter(name = "targetDirectory", value = "pmd-report-windows")
@@ -107,31 +105,29 @@ public class PmdViolationCheckMojoOnWindowsTest {
     public void testFailureAndWarningPriority(PmdViolationCheckMojo mojo) throws Exception {
         try {
             mojo.execute();
-            fail("MojoFailureException expected");
-        } catch (final MojoFailureException e) {
+            fail("MojoException expected");
+        } catch (final MojoException e) {
             assertTrue(e.getMessage()
-                    .startsWith("PMD " + AbstractPmdReport.getPmdVersion()
-                            + " has found 5 violations and issued 3 warnings."));
+                    .startsWith("PMD " + PMDVersion.VERSION + " has found 5 violations and issued 3 warnings."));
         }
     }
 
-    @Basedir("/unit/custom-configuration")
+    @Basedir("${basedir}/target/test-classes/unit/custom-configuration")
     @InjectMojo(goal = "check", pom = "pmd-check-exception-test-plugin-config.xml")
     @MojoParameter(name = "siteDirectory", value = "src/site")
     @MojoParameter(name = "targetDirectory", value = "pmd-report-windows")
     @Test
     public void testException(PmdViolationCheckMojo mojo) throws Exception {
         try {
-            mojo.project = new MavenProject();
             mojo.execute();
 
-            fail("MojoFailureException should be thrown.");
-        } catch (final MojoFailureException e) {
+            fail("MojoException should be thrown.");
+        } catch (final MojoException e) {
             assertTrue(e.getMessage().contains("Unable to perform check"));
         }
     }
 
-    @Basedir("/unit/default-configuration")
+    @Basedir("${basedir}/target/test-classes/unit/default-configuration")
     @InjectMojo(goal = "check", pom = "pmd-check-pmd-exclusions-configuration-plugin-config.xml")
     @MojoParameter(name = "siteDirectory", value = "src/site")
     @MojoParameter(name = "targetDirectory", value = "pmd-report-windows")

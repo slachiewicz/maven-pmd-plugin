@@ -18,7 +18,7 @@
  */
 package org.apache.maven.plugins.pmd;
 
-import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.api.plugin.MojoException;
 
 /**
  * @author Andreas Dangel
@@ -30,9 +30,9 @@ public interface ExcludeFromFile<D> {
      * Loads the exclude definitions from the given file.
      *
      * @param excludeFromFailureFile the path to the properties file
-     * @throws MojoExecutionException if the properties file couldn't be loaded
+     * @throws MojoException if the properties file couldn't be loaded
      */
-    void loadExcludeFromFailuresData(String excludeFromFailureFile) throws MojoExecutionException;
+    void loadExcludeFromFailuresData(String excludeFromFailureFile) throws MojoException;
 
     /**
      * Determines how many exclusions are considered.

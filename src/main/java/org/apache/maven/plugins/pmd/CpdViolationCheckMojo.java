@@ -24,12 +24,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Execute;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.api.plugin.MojoException;
+import org.apache.maven.api.plugin.annotations.Mojo;
+import org.apache.maven.api.plugin.annotations.Parameter;
 import org.apache.maven.plugins.pmd.model.CpdErrorDetail;
 import org.apache.maven.plugins.pmd.model.CpdFile;
 import org.apache.maven.plugins.pmd.model.Duplication;
@@ -39,10 +36,12 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 /**
  * Fails the build if there were any CPD violations in the source code.
  *
+ * <p>This goal only reads the {@code cpd.xml} result file in {@code targetDirectory}. It no longer forks
+ * the {@code cpd} report goal, so that file must have been produced earlier in the build.
+ *
  * @since 2.0
  */
-@Mojo(name = "cpd-check", defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
-@Execute(goal = "cpd")
+@Mojo(name = "cpd-check", defaultPhase = "verify")
 public class CpdViolationCheckMojo extends AbstractPmdViolationCheckMojo<Duplication> {
 
     /**
@@ -69,7 +68,7 @@ public class CpdViolationCheckMojo extends AbstractPmdViolationCheckMojo<Duplica
     /**
      * {@inheritDoc}
      */
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoException {
         if (skip) {
             getLog().info("Skipping CPD execution");
             return;

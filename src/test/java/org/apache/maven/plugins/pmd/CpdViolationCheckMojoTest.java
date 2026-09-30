@@ -21,13 +21,13 @@ package org.apache.maven.plugins.pmd;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.sourceforge.pmd.PMDVersion;
+import org.apache.maven.api.plugin.Log;
+import org.apache.maven.api.plugin.MojoException;
 import org.apache.maven.api.plugin.testing.Basedir;
 import org.apache.maven.api.plugin.testing.InjectMojo;
 import org.apache.maven.api.plugin.testing.MojoParameter;
 import org.apache.maven.api.plugin.testing.MojoTest;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.project.MavenProject;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -45,7 +45,7 @@ import static org.mockito.Mockito.verify;
 @MojoTest
 public class CpdViolationCheckMojoTest {
 
-    @Basedir("/unit/default-configuration")
+    @Basedir("${basedir}/target/test-classes/unit/default-configuration")
     @InjectMojo(goal = "cpd-check", pom = "cpd-check-default-configuration-plugin-config.xml")
     @MojoParameter(name = "siteDirectory", value = "src/site")
     @MojoParameter(name = "targetDirectory", value = "cpd-report")
@@ -54,13 +54,13 @@ public class CpdViolationCheckMojoTest {
         try {
             mojo.execute();
 
-            fail("MojoFailureException should be thrown.");
-        } catch (final MojoFailureException e) {
-            assertTrue(e.getMessage().startsWith("CPD " + AbstractPmdReport.getPmdVersion() + " has found 1 duplicat"));
+            fail("MojoException should be thrown.");
+        } catch (final MojoException e) {
+            assertTrue(e.getMessage().startsWith("CPD " + PMDVersion.VERSION + " has found 1 duplicat"));
         }
     }
 
-    @Basedir("/unit/default-configuration")
+    @Basedir("${basedir}/target/test-classes/unit/default-configuration")
     @InjectMojo(goal = "cpd-check", pom = "cpd-check-notfailonviolation-plugin-config.xml")
     @MojoParameter(name = "siteDirectory", value = "src/site")
     @MojoParameter(name = "targetDirectory", value = "cpd-report")
@@ -69,23 +69,22 @@ public class CpdViolationCheckMojoTest {
         mojo.execute();
     }
 
-    @Basedir("/unit/custom-configuration")
+    @Basedir("${basedir}/target/test-classes/unit/custom-configuration")
     @InjectMojo(goal = "cpd-check", pom = "cpd-check-exception-test-plugin-config.xml")
     @MojoParameter(name = "siteDirectory", value = "src/site")
     @MojoParameter(name = "targetDirectory", value = "cpd-report")
     @Test
     public void testException(CpdViolationCheckMojo mojo) throws Exception {
         try {
-            mojo.project = new MavenProject();
             mojo.execute();
 
-            fail("MojoFailureException should be thrown.");
-        } catch (MojoFailureException e) {
+            fail("MojoException should be thrown.");
+        } catch (MojoException e) {
             assertTrue(e.getMessage().contains("Unable to perform check"));
         }
     }
 
-    @Basedir("/unit/default-configuration")
+    @Basedir("${basedir}/target/test-classes/unit/default-configuration")
     @InjectMojo(goal = "cpd-check", pom = "cpd-check-cpd-exclusions-configuration-plugin-config.xml")
     @MojoParameter(name = "siteDirectory", value = "src/site")
     @MojoParameter(name = "targetDirectory", value = "cpd-report")
@@ -95,7 +94,7 @@ public class CpdViolationCheckMojoTest {
         mojo.execute();
     }
 
-    @Basedir("/unit/default-configuration")
+    @Basedir("${basedir}/target/test-classes/unit/default-configuration")
     @InjectMojo(goal = "cpd-check", pom = "cpd-check-default-configuration-plugin-config.xml")
     @MojoParameter(name = "siteDirectory", value = "src/site")
     @MojoParameter(name = "targetDirectory", value = "cpd-report")
@@ -104,12 +103,12 @@ public class CpdViolationCheckMojoTest {
     @Test
     public void testVerboseTakesPrecedenceOverPrintFailingErrors(CpdViolationCheckMojo mojo) throws Exception {
         Log log = mock(Log.class);
-        mojo.setLog(log);
+        mojo.log = log;
 
         try {
             mojo.execute();
-            fail("MojoFailureException expected");
-        } catch (MojoFailureException expected) {
+            fail("MojoException expected");
+        } catch (MojoException expected) {
             ArgumentCaptor<CharSequence> messages = ArgumentCaptor.forClass(CharSequence.class);
             verify(log, atLeastOnce()).warn(messages.capture());
             List<CharSequence> violationMessages = messages.getAllValues().stream()

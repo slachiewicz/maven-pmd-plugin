@@ -23,9 +23,10 @@ import javax.inject.Provider;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.api.Session;
+import org.apache.maven.api.Toolchain;
+import org.apache.maven.api.services.ToolchainManager;
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.toolchain.Toolchain;
-import org.apache.maven.toolchain.ToolchainManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,20 +37,19 @@ abstract class ServiceExecutor {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceExecutor.class);
 
-    private final ToolchainManager toolchainManager;
-
     private final Provider<MavenSession> sessionProvider;
 
-    protected ServiceExecutor(ToolchainManager toolchainManager, Provider<MavenSession> sessionProvider) {
-        this.toolchainManager = toolchainManager;
+    protected ServiceExecutor(Provider<MavenSession> sessionProvider) {
         this.sessionProvider = sessionProvider;
     }
 
     public final Toolchain getToolchain(Map<String, String> jdkToolchain) {
         Toolchain tc = null;
+        Session session = sessionProvider.get().getSession();
+        ToolchainManager toolchainManager = session.getService(ToolchainManager.class);
 
         if (jdkToolchain != null) {
-            List<Toolchain> tcs = toolchainManager.getToolchains(sessionProvider.get(), "jdk", jdkToolchain);
+            List<Toolchain> tcs = toolchainManager.getToolchains(session, "jdk", jdkToolchain);
             if (tcs != null && !tcs.isEmpty()) {
                 tc = tcs.get(0);
                 if (tcs.size() > 1) {
@@ -59,7 +59,7 @@ abstract class ServiceExecutor {
         }
 
         if (tc == null) {
-            tc = toolchainManager.getToolchainFromBuildContext("jdk", sessionProvider.get());
+            tc = toolchainManager.getToolchainFromBuildContext(session, "jdk").orElse(null);
         }
 
         return tc;
