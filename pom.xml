@@ -262,12 +262,15 @@ under the License.
           </excludes>
           <testExcludes>
             <testExclude>org/apache/maven/plugins/pmd/CapturingPrintStream.java</testExclude>
+            <testExclude>org/apache/maven/plugins/pmd/CpdReportNoFilesTest.java</testExclude>
             <testExclude>org/apache/maven/plugins/pmd/CpdReportTest.java</testExclude>
             <testExclude>org/apache/maven/plugins/pmd/DependencyArtifactStubFactory.java</testExclude>
             <testExclude>org/apache/maven/plugins/pmd/PmdReportNumberOfThreadsTest.java</testExclude>
+            <testExclude>org/apache/maven/plugins/pmd/PmdReportNoFilesTest.java</testExclude>
             <testExclude>org/apache/maven/plugins/pmd/PmdReportTest.java</testExclude>
             <testExclude>org/apache/maven/plugins/pmd/exec/**</testExclude>
             <testExclude>org/apache/maven/plugins/pmd/stubs/**</testExclude>
+            <testExclude>org/slf4j/simple/MavenSlf4jSimpleFriend.java</testExclude>
           </testExcludes>
         </configuration>
       </plugin>
